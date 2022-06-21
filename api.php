@@ -16,7 +16,7 @@ if (isset($_GET['crud'])) {
 
 
 if ($crud == 'read') {
-    $sql = "select * from EMPLOYEES";
+    $sql = "SELECT * FROM EMPLOYEES";
     $query = $conn->query($sql);
     $members = array();
 
