@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "pweb_uas");
+$conn = new mysqli("localhost", "root", "", "uas");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
