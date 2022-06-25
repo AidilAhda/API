@@ -6,90 +6,78 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$out = array('error' => false);
+$result = array('error' => false);
+$action = '';
 
-$crud = 'read';
 
-if (isset($_GET['crud'])) {
-    $crud = $_GET['crud'];
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
 }
 
-
-if ($crud == 'read') {
-    $sql = "SELECT * FROM EMPLOYEES";
-    $query = $conn->query($sql);
-    $members = array();
-
-    while ($row = $query->fetch_array()) {
-        array_push($members, $row);
+if ($action == 'read') {
+    $sql = $conn->query("SELECT * FROM employees");
+    $users = array();
+    while ($row = $sql->fetch_assoc()) {
+        array_push($users, $row);
     }
-
-    $out['members'] = $members;
+    $result['users'] = $users;
 }
+if ($action == 'create') {
+    $EMPLOYEE_ID = $_POST['employee_id'];
+    $FIRST_NAME = $_POST['first_name'];
+    $LAST_NAME = $_POST['last_name'];
+    $EMAIL = $_POST['email'];
+    $PHONE_NUMBER = $_POST['phone_number'];
+    $JOB_ID = $_POST['job_id'];
+    $SALARY = $_POST['salary'];
+    $DEPARTMENT_ID = $_POST['department_id'];
 
-if ($crud == 'create') {
 
-    $EMPLOYEE_ID = $_POST['EMPLOYEE_ID'];
-    $FIRST_NAME = $_POST['FIRST_NAME'];
-    $LAST_NAME = $_POST['LAST_NAME'];
-    $EMAIL = $_POST['EMAIL'];
-    $PHONE_NUMBER = $_POST['PHONE_NUMBER'];
-    $HIRE_DATE = $_POST['HIRE_DATE'];
-    $JOB_ID = $_POST['JOB_ID'];
-    $SALARY = $_POST['SALARY'];
-    $COMMISION = $_POST['COMMISION'];
-    $MANAGER_ID = $_POST['MANAGER_ID'];
-    $DEPARTMENT_ID = $_POST['DEPARTMENT_ID'];
-    $BONUS = $_POST['BONUS'];
-
-    $sql = "INSERT INTO `employees`(`EMPLOYEE_ID`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`, `PHONE_NUMBER`, `HIRE_DATE`, `JOB_ID`, `SALARY`, `COMMISSION`, `MANAGER_ID`, `DEPARTMENT_ID`, `BONUS`) VALUES ('$EMPLOYEE_ID','$FIRST_NAME', '$LAST_NAME','$EMAIL','$PHONE_NUMBER','$HIRE_DATE','$JOB_ID','$SALARY','$COMMISION','$MANAGER_ID','$DEPARTMENT_ID','$BONUS')";
+    $sql = "INSERT INTO `employees`(`employee_id`, `first_name`, `last_name`, `email`, `phone_number`, `job_id`, `salary`,  `department_id`) VALUES ('$EMPLOYEE_ID','$FIRST_NAME', '$LAST_NAME','$EMAIL','$PHONE_NUMBER','$JOB_ID','$SALARY','$DEPARTMENT_ID')";
     $query = $conn->query($sql);
 
     if ($query) {
-        $out['message'] = "Member Added Successfully";
+        $result['message'] = "Member Added Successfully";
     } else {
-        $out['error'] = true;
-        $out['message'] = "Could not add Member";
+        $result['error'] = true;
+        $result['message'] = "Could not add Member";
     }
 }
 
-if ($crud == 'update') {
+if ($action == 'update') {
 
-    $EMPLOYEE_ID = $_POST['EMPLOYEE_ID'];
-    $FIRST_NAME = $_POST['FIRST_NAME'];
-    $LAST_NAME = $_POST['LAST_NAME'];
-    $EMAIL = $_POST['EMAIL'];
-    $PHONE_NUMBER = $_POST['PHONE_NUMBER'];
-    $HIRE_DATE = $_POST['HIRE_DATE'];
-    $JOB_ID = $_POST['JOB_ID'];
-    $SALARY = $_POST['SALARY'];
-    $COMMISION = $_POST['COMMISION'];
-    $MANAGER_ID = $_POST['MANAGER_ID'];
-    $DEPARTMENT_ID = $_POST['DEPARTMENT_ID'];
-    $BONUS = $_POST['BONUS'];
-    $sql = "UPDATE `employees` SET `FIRST_NAME`='$FIRST_NAME',`LAST_NAME`='$LAST_NAME',`EMAIL`='$LAST_NAME',`PHONE_NUMBER`='$PHONE_NUMBER',`HIRE_DATE`='$HIRE_DATE',`JOB_ID`='$JOB_ID',`SALARY`='$SALARY',`COMMISSION`='$COMMISION',`MANAGER_ID`='$MANAGER_ID',`DEPARTMENT_ID`='$DEPARTMENT_ID',`BONUS`='$BONUS' WHERE `EMPLOYEE_ID`='$EMPLOYEE_ID'";
+    $EMPLOYEE_ID = $_POST['employee_id'];
+    $FIRST_NAME = $_POST['first_name'];
+    $LAST_NAME = $_POST['last_name'];
+    $EMAIL = $_POST['email'];
+    $PHONE_NUMBER = $_POST['phone_number'];
+    $JOB_ID = $_POST['job_id'];
+    $SALARY = $_POST['salary'];
+    $DEPARTMENT_ID = $_POST['department_id'];
+
+    $sql = "UPDATE `employees` SET `first_name`='$FIRST_NAME',`last_name`='$LAST_NAME',`email`='$EMAIL',`phone_number`='$PHONE_NUMBER',`job_id`='$JOB_ID',`salary`='$SALARY',`department_id`='$DEPARTMENT_ID' WHERE `employee_id`='$EMPLOYEE_ID'";
     $query = $conn->query($sql);
 
     if ($query) {
-        $out['message'] = "Member Updated Successfully";
+        $result['message'] = "Member Updated Successfully";
     } else {
-        $out['error'] = true;
-        $out['message'] = "Could not update Member";
+        $result['error'] = true;
+        $result['message'] = "Could not update Member";
     }
 }
 
-if ($crud == 'delete') {
+if ($action == 'delete') {
 
-    $EMPLOYEE_ID = $_POST['EMPLOYEE_ID'];
+    $EMPLOYEE_ID = $_POST['employee_id'];
 
-    $sql = "DELETE FROM `employees` WHERE EMPLOYEE_ID = '$EMPLOYEE_ID'";
+    $sql = "DELETE FROM `employees` WHERE employee_id =  '$EMPLOYEE_ID'";
     $query = $conn->query($sql);
 
     if ($query) {
-        $out['message'] = "Member Deleted Successfully";
+        $result['message'] = "Member Deleted Successfully";
     } else {
-        $out['error'] = true;
-        $out['message'] = "Could not delete Member";
+        $result['error'] = true;
+        $result['message'] = "Could not delete Member";
     }
 }
 
@@ -97,5 +85,5 @@ if ($crud == 'delete') {
 $conn->close();
 
 header("Content-type: application/json");
-echo json_encode($out);
+echo json_encode($result);
 die();
