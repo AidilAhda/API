@@ -13,9 +13,27 @@ $action = '';
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
 }
-
+// read employees
 if ($action == 'read') {
     $sql = $conn->query("SELECT * FROM employees");
+    $users = array();
+    while ($row = $sql->fetch_assoc()) {
+        array_push($users, $row);
+    }
+    $result['users'] = $users;
+}
+// read jobs
+if ($action == 'jobs') {
+    $sql = $conn->query("SELECT * FROM jobs");
+    $users = array();
+    while ($row = $sql->fetch_assoc()) {
+        array_push($users, $row);
+    }
+    $result['users'] = $users;
+}
+// read dep
+if ($action == 'dep') {
+    $sql = $conn->query("SELECT * FROM departments");
     $users = array();
     while ($row = $sql->fetch_assoc()) {
         array_push($users, $row);
