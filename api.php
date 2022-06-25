@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Headers:*');
-$conn = new mysqli("localhost", "root", "", "uas");
+$conn = new mysqli("localhost", "id19168690_api", "Y~^+_xhvaHV26+=J", "id19168690_uas");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
